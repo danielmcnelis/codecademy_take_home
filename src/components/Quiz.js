@@ -9,6 +9,7 @@ class Quiz extends React.Component {
     super();
     this.state = {
       title: null,
+      questions: [],
       score: 0,
       results: [],
       questionIndex: 0,
@@ -59,7 +60,6 @@ class Quiz extends React.Component {
   }
 
   initializeQuestion() {
-    console.log('this.state in initQ()', this.state);
     const { currentQuiz } = this.props;
     const { questions } = currentQuiz;
     if (this.state.questionIndex >= questions.length) return;
@@ -70,8 +70,6 @@ class Quiz extends React.Component {
     const allAnswers = [correctAnswer, ...incorrectAnswers];
 
     shuffleArray(allAnswers);
-
-    console.log('currentQuestion', questions[this.state.questionIndex]);
 
     this.setState({
       feedback: '',
@@ -84,29 +82,37 @@ class Quiz extends React.Component {
     });
   }
 
-  initializeQuiz = async () => {
+  async initializeQuiz() {
+    const { currentQuiz } = this.props;
+    const { questions } = currentQuiz;
+
     await this.setState({
       title: this.props.currentQuiz.title,
+      questions,
       score: 0,
       results: [],
       questionIndex: 0,
     });
 
     this.initializeQuestion();
-  };
+  }
 
   componentDidMount() {
     this.initializeQuiz();
   }
 
   render() {
-    console.log('this.state in render()', this.state);
     const correctAnswer = this.state.correctAnswer;
     const selectAnswer = this.selectAnswer;
     const selectedAnswer = this.state.selectedAnswer;
     const userIsCorrect = !!(
       this.state.selectedAnswer === this.state.correctAnswer
     );
+
+    const buttonDisplay =
+      this.state.questionIndex >= this.props.currentQuiz.questions.length - 1
+        ? 'Summary'
+        : 'Next Question';
 
     return (
       <div>
@@ -141,7 +147,10 @@ class Quiz extends React.Component {
                 <Summary
                   score={this.state.score}
                   len={this.props.currentQuiz.questions.length}
+                  questions={this.state.questions}
+                  results={this.state.results}
                 />
+                <button onClick={() => this.initializeQuiz()}>Retake</button>
                 <button onClick={() => this.goToNextQuiz()}>
                   Go To Next Quiz
                 </button>
@@ -151,14 +160,14 @@ class Quiz extends React.Component {
         ) : (
           ''
         )}
-        {this.state.waitingForSelection &&
+        {this.state.waitingForSelection ||
         this.state.questionIndex >= this.props.currentQuiz.questions.length ? (
           ''
         ) : (
           <div>
             <p id="feedback">{this.state.feedback}</p>
             <button onClick={() => this.goToNextQuestion()}>
-              Go To Next Question
+              Go To {buttonDisplay}
             </button>
           </div>
         )}

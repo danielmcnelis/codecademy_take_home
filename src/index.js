@@ -23,19 +23,21 @@ class App extends React.Component {
   }
 
   startFirstQuiz() {
+    console.log('starting First quiz');
     this.setState({
+      quizzesTaken: 0,
       currentQuiz: quizzes[0],
       nextQuiz: quizzes[1],
     });
   }
 
   startNextQuiz() {
+    if (this.state.quizzesTaken > quizzes.length) return this.startFirstQuiz();
+    console.log('starting Next quiz');
     const newCurrentQuiz = this.state.nextQuiz;
-    const newNextQuiz =
-      this.state.quizzesTaken >= quizzes.length
-        ? quizzes[0]
-        : quizzes[this.state.quizzesTaken];
+    const newNextQuiz = quizzes[this.state.quizzesTaken];
     this.setState({
+      quizzesTaken: this.state.quizzesTaken + 1,
       currentQuiz: newCurrentQuiz,
       nextQuiz: newNextQuiz,
     });
