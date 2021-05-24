@@ -11,15 +11,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "format": "prettier --write \"**/*.+(js|json|css|md|mdx|html)\""
+    "format": "prettier --write \"**/*.+(js|json|css|md|mdx|html)\"",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run build"
-    }
   },
   "browserslist": [
     ">0.2%",
@@ -28,10 +24,13 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "prettier": "^1.15.2",
-    "husky": "^1.1.4",
-    "lint-staged": "^8.0.4"
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^1.15.2"
   },
   "keywords": [],
-  "description": ""
+  "description": "",
+  "lint-staged": {
+    "*.+(js|json|css|md|mdx|html)": "prettier --write"
+  }
 }
