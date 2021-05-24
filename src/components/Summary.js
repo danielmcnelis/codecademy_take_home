@@ -1,21 +1,17 @@
+import React from 'react';
 
-import React from 'react'
+const { getMessage } = require('../data/messages');
+const { quizzes } = require('../data/quizzes');
 
-const {getMessage} = require('../data/messages')
-const {quizzes} = require('../data/quizzes')
+const Summary = props => {
+  return (
+    <div>
+      <p>
+        You got {props.score} out of {props.len} questions right.
+      </p>
+      <p>{getMessage()}</p>
+    </div>
+  );
+};
 
-class Summary extends React.Component {
-  render() {
-    console.log('getMessage()', getMessage())
-    console.log('getMessage()', getMessage())
-    console.log('getMessage()', getMessage())
-    console.log('quizzes', quizzes)
-    return (
-      <div>
-        {"It's a summary!"}
-      </div>
-    )
-  }
-}
-
-export default Summary
+export default Summary;

@@ -1,15 +1,14 @@
+import React from 'react';
 
-import React from 'react'
+const Choice = props => {
+  const { answer, letter, selectAnswer, display } = props;
 
-const Choice = (props) => {
-    const {answer, letter, correctAnswer} = props
+  return (
+    <div className={display} id="options" onClick={() => selectAnswer(answer)}>
+      <p id="answerLabel">{letter}.</p>
+      <p id="answer">{answer}</p>
+    </div>
+  );
+};
 
-    return (
-        <div id="options" onClick={() => console.log(correctAnswer === answer)}>
-            <p id="answerLabel">{letter}.</p>
-            <p id="answer">{answer}</p>
-        </div>
-    )
-}
-
-export default Choice
+export default Choice;
