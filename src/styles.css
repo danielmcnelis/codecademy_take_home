@@ -2,3 +2,20 @@
   font-family: sans-serif;
   text-align: center;
 }
+
+#options {
+  display: flex;
+  align-items: left;
+  flex-direction: row;
+  padding: 10px;
+  max-width: 400px;
+  margin: auto;
+}
+
+#answerLabel {
+  padding: 0px 10px
+}
+
+#answer {
+  font-weight: 100;
+}

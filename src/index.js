@@ -1,18 +1,40 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Home from './components/Home'
+import Quiz from './components/Quiz'
+import Summary from './components/Summary'
+import './styles.css'
 
-import './styles.css';
+const {getMessage} = require('./data/messages')
+const {quizzes} = require('./data/quizzes')
 
-const App = () => {
-  return (
-    <div className="app">
-      <h1>Hello, World!</h1>
-      <p>Thanks so much for taking our frontend takehome assessment!</p>
-      <p>
-        See details in <code>./README.md</code> .
-      </p>
-    </div>
-  );
-};
+class App extends React.Component {
+    constructor() {
+        super()
+        this.state = {
+            currentQuiz: null,
+            nextQuiz: quizzes[0]
+        } 
+
+        this.startQuiz = this.startQuiz.bind(this)
+    }
+
+    startQuiz() {
+      this.setState({
+        currentQuiz: quizzes[0],
+        nextQuiz: quizzes[1]
+      })
+    }
+
+    render() {
+      return (
+        <div className="app">
+          {
+            this.state.currentQuiz ? <Quiz currentQuiz={this.state.currentQuiz}/> : <Home startQuiz={this.startQuiz}/>
+          }
+        </div>
+      )
+    }
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
