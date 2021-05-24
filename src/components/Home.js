@@ -4,7 +4,7 @@ const Home = props => {
   const { startFirstQuiz } = props;
   return (
     <div className="home">
-      <h1>Codecemy Assessment Center</h1>
+      <h1>Codecademy Assessment Center</h1>
       <p>Click to start the first quiz:</p>
       <button id="startButton" onClick={() => startFirstQuiz()}>
         Start
