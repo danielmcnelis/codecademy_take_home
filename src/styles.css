@@ -36,6 +36,23 @@ button {
   margin: 0px auto;
 }
 
+@media screen and (max-width: 668px) {
+  .results {
+    align-items: center;
+    flex-direction: column;
+    padding: 10px 0px;
+  }
+
+  .summaryNumber {
+    display: none;
+  }
+
+  .summaryQuestion {
+    font-style: normal;
+    max-width: 248px;
+  }
+}
+
 .choices {
   cursor: pointer;
   display: flex;

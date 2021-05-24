@@ -57,6 +57,8 @@ class Quiz extends React.Component {
       feedback,
       score,
     });
+
+    return userIsCorrect;
   }
 
   initializeQuestion() {
@@ -122,7 +124,7 @@ class Quiz extends React.Component {
             {this.state.questionIndex <
               this.props.currentQuiz.questions.length &&
             this.state.currentQuestion ? (
-              <div>
+              <div className="flex-col">
                 <p>{this.state.currentQuestion.text}</p>
                 {this.state.allAnswers.map(function(answer, index) {
                   const letter = String.fromCharCode(65 + index);
