@@ -33,7 +33,7 @@ class App extends React.Component {
     const newCurrentQuiz = this.state.nextQuiz;
     const newNextQuiz =
       this.state.quizzesTaken >= quizzes.length
-        ? null
+        ? quizzes[0]
         : quizzes[this.state.quizzesTaken];
     this.setState({
       currentQuiz: newCurrentQuiz,

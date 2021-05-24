@@ -16,29 +16,32 @@ class Quiz extends React.Component {
       selectedAnswer: null,
       correctAnswer: null,
       allAnswers: [],
-      userIsCorrect: false,
+      userIsCorrect: null,
       feedback: '',
       waitingForSelection: true,
     };
 
-    this.displayNextQuestion = this.displayNextQuestion.bind(this);
+    this.goToNextQuestion = this.goToNextQuestion.bind(this);
+    this.goToNextQuiz = this.goToNextQuiz.bind(this);
     this.initializeQuestion = this.initializeQuestion.bind(this);
+    this.initializeQuiz = this.initializeQuiz.bind(this);
     this.selectAnswer = this.selectAnswer.bind(this);
   }
 
-  displayNextQuestion = async () => {
+  async goToNextQuestion() {
     await this.setState({
-      feedback: '',
-      userIsCorrect: false,
-      waitingForSelection: true,
-      selectedAnswer: null,
       questionIndex: this.state.questionIndex + 1,
     });
 
     this.initializeQuestion();
-  };
+  }
 
-  selectAnswer = answer => {
+  async goToNextQuiz() {
+    await this.props.startNextQuiz();
+    this.initializeQuiz();
+  }
+
+  selectAnswer(answer) {
     if (!this.state.waitingForSelection) return;
 
     const userIsCorrect = answer === this.state.correctAnswer;
@@ -46,14 +49,14 @@ class Quiz extends React.Component {
     const score = userIsCorrect ? this.state.score + 1 : this.state.score;
 
     this.setState({
-      selectedAnswer: answer,
       waitingForSelection: false,
+      selectedAnswer: answer,
       results: [...this.state.results, [answer, userIsCorrect]],
       userIsCorrect,
       feedback,
       score,
     });
-  };
+  }
 
   initializeQuestion() {
     console.log('this.state in initQ()', this.state);
@@ -68,16 +71,32 @@ class Quiz extends React.Component {
 
     shuffleArray(allAnswers);
 
+    console.log('currentQuestion', questions[this.state.questionIndex]);
+
     this.setState({
-      title: this.props.currentQuiz.title,
+      feedback: '',
+      userIsCorrect: null,
+      waitingForSelection: true,
+      selectedAnswer: null,
       currentQuestion: questions[this.state.questionIndex],
       correctAnswer: correctAnswer,
       allAnswers: allAnswers,
     });
   }
 
-  componentDidMount() {
+  initializeQuiz = async () => {
+    await this.setState({
+      title: this.props.currentQuiz.title,
+      score: 0,
+      results: [],
+      questionIndex: 0,
+    });
+
     this.initializeQuestion();
+  };
+
+  componentDidMount() {
+    this.initializeQuiz();
   }
 
   render() {
@@ -95,7 +114,8 @@ class Quiz extends React.Component {
           <div>
             <h2>{this.state.title}</h2>
             {this.state.questionIndex <
-            this.props.currentQuiz.questions.length ? (
+              this.props.currentQuiz.questions.length &&
+            this.state.currentQuestion ? (
               <div>
                 <p>{this.state.currentQuestion.text}</p>
                 {this.state.allAnswers.map(function(answer, index) {
@@ -122,7 +142,7 @@ class Quiz extends React.Component {
                   score={this.state.score}
                   len={this.props.currentQuiz.questions.length}
                 />
-                <button onClick={() => this.props.startNextQuiz()}>
+                <button onClick={() => this.goToNextQuiz()}>
                   Go To Next Quiz
                 </button>
               </div>
@@ -131,12 +151,13 @@ class Quiz extends React.Component {
         ) : (
           ''
         )}
-        {this.state.waitingForSelection ? (
+        {this.state.waitingForSelection &&
+        this.state.questionIndex >= this.props.currentQuiz.questions.length ? (
           ''
         ) : (
           <div>
             <p id="feedback">{this.state.feedback}</p>
-            <button onClick={() => this.displayNextQuestion()}>
+            <button onClick={() => this.goToNextQuestion()}>
               Go To Next Question
             </button>
           </div>
